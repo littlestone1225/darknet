@@ -1596,7 +1596,7 @@ void calc_anchors(char *datacfg, int num_of_clusters, int width, int height, int
     free(rel_width_height_array);
     free(counter_per_class);
 
-    getchar();
+    //getchar();
 }
 
 
