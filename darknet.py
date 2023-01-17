@@ -25,17 +25,6 @@ from ctypes import *
 import math
 import random
 import os
-import yaml	
-
-# read path from yolov4.yaml	
-yml = yaml.safe_load(open('../config/yolov4.yaml'))	
-
-aoi_dir_name = os.getenv('AOI_DIR_NAME')
-assert aoi_dir_name != None, "Environment variable AOI_DIR_NAME is None"
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-idx = current_dir.find(aoi_dir_name) + len(aoi_dir_name)
-aoi_dir = current_dir[:idx]
 
 
 class BOX(Structure):
@@ -231,8 +220,9 @@ if os.name == "nt":
             lib = CDLL(winGPUdll, RTLD_GLOBAL)
             print("Environment variables indicated a CPU run, but we didn't find {}. Trying a GPU run anyway.".format(winNoGPUdll))
 else:
-    lib = CDLL(os.path.join(os.path.abspath(yml['YOLO_darknet_path']),"libdarknet.so"), RTLD_GLOBAL)	
-
+    lib = CDLL(os.path.join(
+        os.environ.get('DARKNET_PATH', './'),
+        "libdarknet.so"), RTLD_GLOBAL)
 lib.network_width.argtypes = [c_void_p]
 lib.network_width.restype = c_int
 lib.network_height.argtypes = [c_void_p]
